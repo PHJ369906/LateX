@@ -11,7 +11,7 @@
     <a href="https://chatbot.weixin.qq.com" target="_blank">
         <img alt="微信对话开放平台" src="https://img.shields.io/badge/微信对话开放平台-5ac725">
     </a>
-    <a href="https://github.com/Tencent/WeKnora/blob/main/LICENSE">
+    <a href="./LICENSE">
         <img src="https://img.shields.io/badge/License-MIT-ffffff?labelColor=d4eaf7&color=2e6cc4" alt="License">
     </a>
     <a href="./CHANGELOG.md">
@@ -105,7 +105,8 @@ WeKnora 采用现代化模块化设计，构建了一条完整的文档理解与
 
 ```bash
 # 克隆主仓库
-git clone https://github.com/Tencent/WeKnora.git
+git clone <项目仓库地址>
+# 将 <项目仓库地址> 替换为实际的 WeKnora 仓库地址
 cd WeKnora
 ```
 
@@ -156,7 +157,7 @@ make stop-all
 
 ### 🔌 使用微信对话开放平台
 
-WeKnora 作为[微信对话开放平台](https://chatbot.weixin.qq.com)的核心技术框架，提供更简便的使用方式：
+WeKnora 可与[微信对话开放平台](https://chatbot.weixin.qq.com)深度集成，提供更简便的使用方式：
 
 - **零代码部署**：只需上传知识，即可在微信生态中快速部署智能问答服务，实现"即问即答"的体验
 - **高效问题管理**：支持高频问题的独立分类管理，提供丰富的数据工具，确保回答精准可靠且易于维护
@@ -164,7 +165,8 @@ WeKnora 作为[微信对话开放平台](https://chatbot.weixin.qq.com)的核心
 ### 🔗MCP服务器访问已经部署好的WEKnora
 #### 1️⃣克隆储存库
 ```
-git clone https://github.com/Tencent/WeKnora
+git clone <项目仓库地址>
+# 将 <项目仓库地址> 替换为实际的 WeKnora 仓库地址
 ```
 #### 2️⃣配置MCP服务器
 mcp客户端配置服务器
@@ -283,7 +285,7 @@ make clean-db
 
 ## 🤝 贡献指南
 
-我们欢迎社区用户参与贡献！如有建议、Bug 或新功能需求，请通过 [Issue](https://github.com/Tencent/WeKnora/issues) 提出，或直接提交 Pull Request。
+我们欢迎社区用户参与贡献！如有建议、Bug 或新功能需求，请在项目仓库的 Issue 页面提出，或直接提交 Pull Request。
 
 ### 🎯 贡献方式
 
@@ -324,3 +326,7 @@ refactor: 重构文档解析模块
 
 本项目基于 [MIT](./LICENSE) 协议发布。
 你可以自由使用、修改和分发本项目代码，但需保留原始版权声明。
+
+## 📌 致谢
+
+本说明文档基于腾讯团队开放的 WeKnora 项目文档进行整理和适配。

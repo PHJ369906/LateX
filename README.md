@@ -11,7 +11,7 @@
     <a href="https://chatbot.weixin.qq.com" target="_blank">
         <img alt="微信对话开放平台" src="https://img.shields.io/badge/微信对话开放平台-5ac725">
     </a>
-    <a href="https://github.com/Tencent/WeKnora/blob/main/LICENSE">
+    <a href="./LICENSE">
         <img src="https://img.shields.io/badge/License-MIT-ffffff?labelColor=d4eaf7&color=2e6cc4" alt="License">
     </a>
     <a href="./CHANGELOG.md">
@@ -105,7 +105,8 @@ Make sure the following tools are installed on your system:
 
 ```bash
 # Clone the main repository
-git clone https://github.com/Tencent/WeKnora.git
+git clone <repository-url>
+# Replace <repository-url> with the actual WeKnora repository address
 cd WeKnora
 ```
 
@@ -156,7 +157,7 @@ Once started, services will be available at:
 
 ### 🔌 Using WeChat Dialog Open Platform
 
-WeKnora serves as the core technology framework for the [WeChat Dialog Open Platform](https://chatbot.weixin.qq.com), providing a more convenient usage approach:
+WeKnora integrates smoothly with the [WeChat Dialog Open Platform](https://chatbot.weixin.qq.com), offering a convenient path to deploy its conversational capabilities:
 
 - **Zero-code Deployment**: Simply upload knowledge to quickly deploy intelligent Q&A services within the WeChat ecosystem, achieving an "ask and answer" experience
 - **Efficient Question Management**: Support for categorized management of high-frequency questions, with rich data tools to ensure accurate, reliable, and easily maintainable answers
@@ -166,7 +167,8 @@ WeKnora serves as the core technology framework for the [WeChat Dialog Open Plat
 
 #### 1️⃣ Clone the repository
 ```
-git clone https://github.com/Tencent/WeKnora
+git clone <repository-url>
+# Replace <repository-url> with the actual WeKnora repository address
 ```
 
 #### 2️⃣ Configure MCP Server
@@ -286,7 +288,7 @@ make clean-db
 
 ## 🤝 Contributing
 
-We welcome community contributions! For suggestions, bugs, or feature requests, please submit an [Issue](https://github.com/Tencent/WeKnora/issues) or directly create a Pull Request.
+We welcome community contributions! For suggestions, bugs, or feature requests, please use the project issue tracker or open a Pull Request.
 
 ### 🎯 How to Contribute
 
@@ -327,3 +329,7 @@ refactor: Restructure document parsing module
 
 This project is licensed under the [MIT License](./LICENSE).
 You are free to use, modify, and distribute the code with proper attribution.
+
+## 📌 Acknowledgements
+
+This documentation is adapted from the WeKnora project materials originally open-sourced by the Tencent team.
