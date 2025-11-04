@@ -1,0 +1,121 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: weknora-java
+  main:
+    web-application-type: reactive
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/WeKnora}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres123!@#}
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+mybatis-plus:
+  mapper-locations: classpath*:/mappers/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg traceId=%X{traceId} requestId=%X{requestId}%n"
+
+# DocReader gRPC config (skeleton)
+docreader:
+  host: ${DOCREADER_HOST:localhost}
+  port: ${DOCREADER_PORT:50051}
+  max-inbound-size: 52428800 # 50MB
+
+# LLM Service Configuration
+llm:
+  # Default LLM provider: ollama or openai
+  provider: ${LLM_PROVIDER:ollama}
+  
+  # Ollama Configuration
+  ollama:
+    base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+    default-model: ${OLLAMA_DEFAULT_MODEL:qwen3:8b}
+    embedding-model: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text:latest}
+    timeout: ${OLLAMA_TIMEOUT:60}
+    
+  # OpenAI Configuration  
+  openai:
+    api-key: ${OPENAI_API_KEY:}
+    base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+    default-model: ${OPENAI_DEFAULT_MODEL:gpt-3.5-turbo}
+    embedding-model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
+    timeout: ${OPENAI_TIMEOUT:30}
+    
+  # Title Generation Settings
+  title-generation:
+    enabled: ${LLM_TITLE_GENERATION_ENABLED:true}
+    max-tokens: ${LLM_TITLE_MAX_TOKENS:20}
+    temperature: ${LLM_TITLE_TEMPERATURE:0.3}
+    prompt-template: "Based on the following conversation, generate a concise title (max 20 characters):\n{conversation}"
+
+# Dataset Configuration
+dataset:
+  # Path to parquet files directory
+  base-path: ${DATASET_BASE_PATH:./dataset/samples}
+  # Enable caching for better performance
+  cache-enabled: ${DATASET_CACHE_ENABLED:true}
+  # Cache TTL in seconds
+  cache-ttl: ${DATASET_CACHE_TTL:3600}
+  # Default dataset to use if not specified
+  default-dataset: ${DATASET_DEFAULT:default}
+  
+  # Parquet file names
+  files:
+    queries: queries.parquet
+    corpus: corpus.parquet
+    answers: answers.parquet
+    qrels: qrels.parquet
+    qas: qas.parquet
+
+# Stream State Management Configuration
+stream:
+  state:
+    # Storage type: memory or redis
+    storage: ${STREAM_STATE_STORAGE:memory}
+    # TTL for stream states in seconds
+    ttl: ${STREAM_STATE_TTL:300}
+    # Cleanup interval in seconds
+    cleanup-interval: ${STREAM_STATE_CLEANUP_INTERVAL:60}
+    # Maximum buffer size per stream
+    max-buffer-size: ${STREAM_MAX_BUFFER_SIZE:1048576} # 1MB
+    
+  # Redis configuration (if storage=redis)
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: ${REDIS_DATABASE:0}
+    timeout: ${REDIS_TIMEOUT:2000}
+
+# Multimodal Testing Configuration
+multimodal:
+  test:
+    # Test samples for different languages
+    samples:
+      english: "The quick brown fox jumps over the lazy dog. This is a comprehensive test sentence."
+      chinese: "WeKnora是一个基于大语言模型的知识检索系统，支持多模态内容理解。"
+      mixed: "WeKnora system supports 多语言 embedding and 混合内容 processing."
+    # Image test settings
+    image:
+      max-size: ${MULTIMODAL_IMAGE_MAX_SIZE:5242880} # 5MB
+      supported-formats: [jpg, jpeg, png, gif, webp]
+

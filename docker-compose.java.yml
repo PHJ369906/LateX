@@ -1,0 +1,182 @@
+version: '3.8'
+
+services:
+  # Java版主服务（替代Go版的app服务）
+  weknora-java:
+    build: 
+      context: ./weknora-java
+      dockerfile: Dockerfile
+    image: weknora-java:latest
+    container_name: WeKnora-java
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      - data-files:/data/files
+      - ./weknora-java/src/main/resources/application.yaml:/app/config/application.yaml
+      - ./dataset:/app/dataset
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/v1/system/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    environment:
+      # 数据库配置
+      - DB_URL=jdbc:postgresql://postgres:5432/WeKnora
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres123!@#}
+      
+      # DocReader配置
+      - DOCREADER_HOST=docreader
+      - DOCREADER_PORT=50051
+      
+      # LLM配置
+      - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - OLLAMA_DEFAULT_MODEL=${OLLAMA_DEFAULT_MODEL:-qwen2.5:7b}
+      - OLLAMA_EMBEDDING_MODEL=${OLLAMA_EMBEDDING_MODEL:-nomic-embed-text}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      
+      # 数据集配置
+      - DATASET_BASE_PATH=/app/dataset/samples
+      - DATASET_CACHE_ENABLED=true
+      
+      # 流状态管理配置
+      - STREAM_STATE_STORAGE=${STREAM_STATE_STORAGE:-memory}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      
+      # 存储配置
+      - STORAGE_TYPE=${STORAGE_TYPE:-minio}
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY_ID=${MINIO_ACCESS_KEY_ID:-minioadmin}
+      - MINIO_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY:-minioadmin}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME:-weknora}
+      
+      # JVM配置
+      - JAVA_OPTS=-Xmx2g -Xms512m -XX:+UseG1GC
+      
+      # 时区
+      - TZ=Asia/Shanghai
+    depends_on:
+      postgres:
+        condition: service_healthy
+      docreader:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - WeKnora-network
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # PostgreSQL数据库
+  postgres:
+    image: postgres:15
+    container_name: WeKnora-postgres
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres123!@#}
+      - POSTGRES_DB=${DB_NAME:-WeKnora}
+      - TZ=Asia/Shanghai
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./migrations/mysql/00-init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - WeKnora-network
+    restart: unless-stopped
+
+  # DocReader文档处理服务
+  docreader:
+    image: wechatopenai/weknora-docreader:latest
+    container_name: WeKnora-docreader
+    ports:
+      - "${DOCREADER_PORT:-50051}:50051"
+    environment:
+      - STORAGE_TYPE=${STORAGE_TYPE:-minio}
+      - MINIO_ENDPOINT=minio:9000
+      - MINIO_ACCESS_KEY_ID=${MINIO_ACCESS_KEY_ID:-minioadmin}
+      - MINIO_SECRET_ACCESS_KEY=${MINIO_SECRET_ACCESS_KEY:-minioadmin}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME:-weknora}
+    healthcheck:
+      test: ["CMD", "grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - WeKnora-network
+    restart: unless-stopped
+
+  # Redis缓存
+  redis:
+    image: redis:7-alpine
+    container_name: WeKnora-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - WeKnora-network
+    restart: unless-stopped
+
+  # MinIO对象存储
+  minio:
+    image: minio/minio:latest
+    container_name: WeKnora-minio
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ACCESS_KEY_ID:-minioadmin}
+      - MINIO_ROOT_PASSWORD=${MINIO_SECRET_ACCESS_KEY:-minioadmin}
+    command: server --console-address ":9001" /data
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - WeKnora-network
+    restart: unless-stopped
+
+  # 前端（可选）
+  frontend:
+    image: wechatopenai/weknora-frontend:latest
+    container_name: WeKnora-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    environment:
+      - API_BASE_URL=http://weknora-java:8080
+    depends_on:
+      - weknora-java
+    networks:
+      - WeKnora-network
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  data-files:
+  redis_data:
+  minio_data:
+
+networks:
+  WeKnora-network:
+    driver: bridge
