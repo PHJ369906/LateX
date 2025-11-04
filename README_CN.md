@@ -5,11 +5,11 @@
 </p>
 
 <p align="center">
-    <a href="https://weknora.weixin.qq.com" target="_blank">
+    <a href="https://weknora.example.com" target="_blank">
         <img alt="官方网站" src="https://img.shields.io/badge/官方网站-WeKnora-4e6b99">
     </a>
-    <a href="https://chatbot.weixin.qq.com" target="_blank">
-        <img alt="微信对话开放平台" src="https://img.shields.io/badge/微信对话开放平台-5ac725">
+    <a href="https://weknora.example.com/integration" target="_blank">
+        <img alt="对话平台集成" src="https://img.shields.io/badge/对话平台集成-5ac725">
     </a>
     <a href="./LICENSE">
         <img src="https://img.shields.io/badge/License-MIT-ffffff?labelColor=d4eaf7&color=2e6cc4" alt="License">
@@ -35,11 +35,11 @@
 
 ## 📌 项目介绍
 
-[**WeKnora（维娜拉）**](https://weknora.weixin.qq.com) 是一款基于大语言模型（LLM）的文档理解与语义检索框架，专为结构复杂、内容异构的文档场景而打造。
+[**WeKnora（维娜拉）**](https://weknora.example.com) 是一款基于大语言模型（LLM）的文档理解与语义检索框架，专为结构复杂、内容异构的文档场景而打造。
 
 框架采用模块化架构，融合多模态预处理、语义向量索引、智能召回与大模型生成推理，构建起高效、可控的文档问答流程。核心检索流程基于 **RAG（Retrieval-Augmented Generation）** 机制，将上下文相关片段与语言模型结合，实现更高质量的语义回答。
 
-**官网：** https://weknora.weixin.qq.com
+**官网：** https://weknora.example.com
 
 ## 🔒 安全声明
 
@@ -155,13 +155,13 @@ make stop-all
 * 后端 API：`http://localhost:8080`
 * 链路追踪（Jaeger）：`http://localhost:16686`
 
-### 🔌 使用微信对话开放平台
+### 🔌 对话平台集成
 
-WeKnora 可与[微信对话开放平台](https://chatbot.weixin.qq.com)深度集成，提供更简便的使用方式：
+WeKnora 支持与企业自建或第三方的对话平台深度集成，提供更简便的使用方式：
 
-- **零代码部署**：只需上传知识，即可在微信生态中快速部署智能问答服务，实现"即问即答"的体验
+- **零代码部署**：只需上传知识，即可在目标渠道快速部署智能问答服务，实现"即问即答"的体验
 - **高效问题管理**：支持高频问题的独立分类管理，提供丰富的数据工具，确保回答精准可靠且易于维护
-- **微信生态覆盖**：通过微信对话开放平台，WeKnora 的智能问答能力可无缝集成到公众号、小程序等微信场景中，提升用户交互体验
+- **多渠道覆盖**：WeKnora 的智能问答能力可无缝集成到企业门户、客服系统、移动应用等场景中，提升用户交互体验
 ### 🔗MCP服务器访问已经部署好的WEKnora
 #### 1️⃣克隆储存库
 ```

@@ -5,11 +5,11 @@
 </p>
 
 <p align="center">
-    <a href="https://weknora.weixin.qq.com" target="_blank">
+    <a href="https://weknora.example.com" target="_blank">
         <img alt="官方网站" src="https://img.shields.io/badge/官方网站-WeKnora-4e6b99">
     </a>
-    <a href="https://chatbot.weixin.qq.com" target="_blank">
-        <img alt="微信对话开放平台" src="https://img.shields.io/badge/微信对话开放平台-5ac725">
+    <a href="https://weknora.example.com/integration" target="_blank">
+        <img alt="Conversational Platform" src="https://img.shields.io/badge/Conversational%20Platform-5ac725">
     </a>
     <a href="./LICENSE">
         <img src="https://img.shields.io/badge/License-MIT-ffffff?labelColor=d4eaf7&color=2e6cc4" alt="License">
@@ -35,11 +35,11 @@
 
 ## 📌 Overview
 
-[**WeKnora**](https://weknora.weixin.qq.com) is an LLM-powered framework designed for deep document understanding and semantic retrieval, especially for handling complex, heterogeneous documents. 
+[**WeKnora**](https://weknora.example.com) is an LLM-powered framework designed for deep document understanding and semantic retrieval, especially for handling complex, heterogeneous documents. 
 
 It adopts a modular architecture that combines multimodal preprocessing, semantic vector indexing, intelligent retrieval, and large language model inference. At its core, WeKnora follows the **RAG (Retrieval-Augmented Generation)** paradigm, enabling high-quality, context-aware answers by combining relevant document chunks with model reasoning.
 
-**Website:** https://weknora.weixin.qq.com
+**Website:** https://weknora.example.com
 
 ## 🔒 Security Notice
 
@@ -155,13 +155,13 @@ Once started, services will be available at:
 * Backend API: `http://localhost:8080`
 * Jaeger Tracing: `http://localhost:16686`
 
-### 🔌 Using WeChat Dialog Open Platform
+### 🔌 Conversational Platform Integration
 
-WeKnora integrates smoothly with the [WeChat Dialog Open Platform](https://chatbot.weixin.qq.com), offering a convenient path to deploy its conversational capabilities:
+WeKnora integrates smoothly with in-house or third-party conversational platforms, offering a streamlined path to deploy intelligent assistants:
 
-- **Zero-code Deployment**: Simply upload knowledge to quickly deploy intelligent Q&A services within the WeChat ecosystem, achieving an "ask and answer" experience
-- **Efficient Question Management**: Support for categorized management of high-frequency questions, with rich data tools to ensure accurate, reliable, and easily maintainable answers
-- **WeChat Ecosystem Integration**: Through the WeChat Dialog Open Platform, WeKnora's intelligent Q&A capabilities can be seamlessly integrated into WeChat Official Accounts, Mini Programs, and other WeChat scenarios, enhancing user interaction experiences
+- **Zero-code Deployment**: Simply upload knowledge to launch conversational services across preferred channels and deliver instant responses
+- **Efficient Question Management**: Support categorized management of high-frequency questions with rich data tools to keep answers accurate, reliable, and easy to maintain
+- **Omnichannel Coverage**: WeKnora's Q&A capabilities connect with web portals, customer service desks, mobile apps, and other interactive touchpoints to elevate user experience
 
 ### 🔗 Access WeKnora via MCP Server
 
