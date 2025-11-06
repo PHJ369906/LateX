@@ -15,6 +15,43 @@ PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 echo -e "${GREEN}WeKnora Java版启动脚本${NC}"
 echo "================================"
 
+# 选择可用的 Docker Compose 命令
+DOCKER_COMPOSE_BIN=""
+DOCKER_COMPOSE_SUBCMD=""
+
+detect_compose_cmd() {
+    if docker compose version &> /dev/null; then
+        DOCKER_COMPOSE_BIN="docker"
+        DOCKER_COMPOSE_SUBCMD="compose"
+        return 0
+    fi
+
+    if command -v docker-compose &> /dev/null; then
+        if docker-compose version &> /dev/null; then
+            DOCKER_COMPOSE_BIN="docker-compose"
+            DOCKER_COMPOSE_SUBCMD=""
+            return 0
+        fi
+    fi
+
+    return 1
+}
+
+run_compose() {
+    local args=("$@")
+    if [ -n "$DOCKER_COMPOSE_SUBCMD" ]; then
+        "$DOCKER_COMPOSE_BIN" "$DOCKER_COMPOSE_SUBCMD" "${args[@]}"
+    else
+        "$DOCKER_COMPOSE_BIN" "${args[@]}"
+    fi
+}
+
+# 确认 docker compose 可用
+if ! detect_compose_cmd; then
+    echo -e "${RED}[ERROR]${NC} 未检测到 docker compose，请安装 docker compose 插件或 docker-compose。"
+    exit 1
+fi
+
 # 检查参数
 ACTION=${1:-start}
 
@@ -45,7 +82,7 @@ EOF
     cd "$PROJECT_ROOT"
     
     # 使用Java版docker-compose启动
-    docker-compose -f docker-compose.java.yml up -d --build
+    run_compose -f docker-compose.java.yml up -d --build
     
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}[SUCCESS]${NC} Java版服务启动成功！"
@@ -66,7 +103,7 @@ EOF
   stop)
     echo -e "${BLUE}[INFO]${NC} 停止Java版WeKnora服务..."
     cd "$PROJECT_ROOT"
-    docker-compose -f docker-compose.java.yml down
+    run_compose -f docker-compose.java.yml down
     echo -e "${GREEN}[SUCCESS]${NC} 服务已停止"
     ;;
     
@@ -79,13 +116,13 @@ EOF
     
   logs)
     cd "$PROJECT_ROOT"
-    docker-compose -f docker-compose.java.yml logs -f weknora-java
+    run_compose -f docker-compose.java.yml logs -f weknora-java
     ;;
     
   status)
     cd "$PROJECT_ROOT"
     echo -e "${BLUE}[INFO]${NC} 服务状态："
-    docker-compose -f docker-compose.java.yml ps
+    run_compose -f docker-compose.java.yml ps
     ;;
     
   build)
