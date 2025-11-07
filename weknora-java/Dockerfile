@@ -1,16 +1,21 @@
+# syntax=docker/dockerfile:1.4
 # 多阶段构建 - 第一阶段：构建
 FROM maven:3.8-openjdk-17 AS builder
 
 # 设置工作目录
 WORKDIR /app
 
-# 复制pom.xml和源代码
+# 仅复制pom.xml以便充分利用缓存
 COPY pom.xml .
+
+# 预先下载依赖，使用BuildKit缓存加速后续构建
+RUN --mount=type=cache,target=/root/.m2 mvn -B dependency:go-offline
+
+# 复制源代码
 COPY src ./src
 
-# 下载依赖并构建应用
-RUN mvn dependency:go-offline
-RUN mvn clean package -DskipTests
+# 下载依赖并构建可执行JAR
+RUN --mount=type=cache,target=/root/.m2 mvn -B -DskipTests clean package spring-boot:repackage
 
 # 第二阶段：运行
 FROM openjdk:17-jdk-slim

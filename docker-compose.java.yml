@@ -68,7 +68,9 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - WeKnora-network
+      WeKnora-network:
+        aliases:
+          - app
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
